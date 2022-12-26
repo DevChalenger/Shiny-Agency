@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import homePicture from '../assets/home-picture.svg';
-import { StyledLink } from '../utils/components';
+import { StyledLink } from '../utils/style/components';
 import colors from '../utils/style/colors';
 
 const StyledHome = styled.main`
@@ -29,7 +29,7 @@ const Home = () => {
         <StyledTitle>
           Repérez vos besoins, on s’occupe du reste, avec les meilleurs talents
         </StyledTitle>
-        <StyledLink to={'/survey/'} $isFullLink>
+        <StyledLink to={'/survey/1'} $isFullLink>
           Faire le test
         </StyledLink>
       </StyledLefCol>

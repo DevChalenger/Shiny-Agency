@@ -7,42 +7,37 @@ import {
 
 // Header and Footer
 import Header from './components/Header';
+import Footer from './components/Footer';
 
 // Routes path
 import Home from './pages/Home';
 import Survey from './pages/Survey';
-import Error404 from './pages/Error404';
+import Error from './pages/Error';
 import Results from './pages/Results';
 import Freelances from './pages/Freelances';
-import styled, { createGlobalStyle } from 'styled-components';
 
-const GlobalStyle = createGlobalStyle`
-    * {
-        font-family: 'Trebuchet MS', Helvetica, sans-serif;
-        box-sizing: border-box;
-    }
-    
-`;
-
-const AppContainer = styled.div`
-  padding: 40px 64px 0 63px;
-`;
+import { ThemeProvider } from './utils/context/theme';
+import GlobalStyle from './utils/style/GlobalStyle';
+import { SurveyProvider } from './utils/context/survey';
 
 const App = () => {
   return (
-    <AppContainer className="app">
-      <Router>
-        <GlobalStyle />
-        <Header />
-        <Navigation>
-          <Route exact path="/" element={<Home />} />
-          <Route path="/survey/:questionNumber" element={<Survey />} />
-          <Route path="/results" element={<Results />} />
-          <Route path="/freelances" element={<Freelances />} />
-          <Route path="*" element={<Error404 />} />
-        </Navigation>
-      </Router>
-    </AppContainer>
+    <ThemeProvider>
+      <SurveyProvider>
+        <Router>
+          <GlobalStyle />
+          <Header />
+          <Navigation>
+            <Route exact path="/" element={<Home />} />
+            <Route path="/survey/:questionNumber" element={<Survey />} />
+            <Route path="/results" element={<Results />} />
+            <Route path="/freelances" element={<Freelances />} />
+            <Route path="*" element={<Error />} />
+          </Navigation>
+          <Footer />
+        </Router>
+      </SurveyProvider>
+    </ThemeProvider>
   );
 };
 
