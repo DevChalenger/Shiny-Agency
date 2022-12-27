@@ -13,6 +13,9 @@ const rotate = keyframes`
 
 export const LoaderWrapper = styled.div`
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1em;
   justify-content: center;
 `;
 
@@ -32,10 +35,11 @@ export const StyledLink = styled(Link)`
   text-decoration: none;
   font-size: 18px;
   text-align: center;
-  ${({ theme, $isFullLink }) =>
-    theme === 'light' && !$isFullLink ? 'color:#8186a0' : 'color:#FFFFFF'};
+  color: ${({ theme, $isFullLink }) =>
+    theme === 'light' && !$isFullLink ? '#8186a0' : '#FFFFFF'};
   ${({ $isFullLink }) =>
     $isFullLink &&
     `background-color:${colors.primary}; 
     border-radius:30px;`}
+  ${({ $isSectionLink }) => $isSectionLink && `padding:10px 70px`}
 `;

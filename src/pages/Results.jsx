@@ -5,6 +5,7 @@ import colors from '../utils/style/colors';
 import { useFetch } from '../utils/hooks/fetch';
 import { StyledLink, Loader, LoaderWrapper } from '../utils/style/components';
 import { ThemeContext } from '../utils/context/theme';
+import ResultPicture from '../assets/results-error.svg';
 
 const ResultsContainer = styled.div`
   display: flex;
@@ -20,7 +21,7 @@ const ResultsContainer = styled.div`
 const ResultsTitle = styled.h2`
   color: ${({ theme }) => (theme === 'light' ? '#000000' : '#ffffff')};
   font-weight: 700;
-  padding: 0 75px;
+  padding: 0 50px;
   font-size: 31px;
   max-width: 60%;
   text-align: center;
@@ -50,6 +51,17 @@ const JobDescription = styled.div`
   }
 `;
 
+const ResultsErrorPicture = styled.img``;
+
+const ResultsSubTitle = styled.span`
+  color: ${({ theme }) => (theme === 'light' ? '#000000' : '#ffffff')};
+  text-align: center;
+  font-size: 20px;
+  font-weight: 700;
+  margin-top: 50px;
+  padding: 0em;
+`;
+
 function formatFetchParams(answers) {
   const answerNumbers = Object.keys(answers);
 
@@ -75,11 +87,13 @@ function Results() {
 
   const resultsData = data?.resultsData;
 
+  console.log(resultsData);
+
   return isLoading ? (
     <LoaderWrapper>
       <Loader />
     </LoaderWrapper>
-  ) : (
+  ) : resultsData?.length !== 0 ? (
     <ResultsContainer theme={theme}>
       <ResultsTitle theme={theme}>
         Les compétences dont vous avez besoin :
@@ -109,6 +123,14 @@ function Results() {
             </JobDescription>
           ))}
       </DescriptionWrapper>
+    </ResultsContainer>
+  ) : (
+    <ResultsContainer theme={theme}>
+      <ResultsTitle theme={theme}>Dommage...</ResultsTitle>
+      <ResultsErrorPicture src={ResultPicture} />
+      <ResultsSubTitle theme={theme}>
+        Il semblerait que vous n’ayez besoin d’aucune compétence
+      </ResultsSubTitle>
     </ResultsContainer>
   );
 }

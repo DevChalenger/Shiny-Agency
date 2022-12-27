@@ -1,52 +1,44 @@
 import Card from '../components/Card';
 import styled from 'styled-components';
 import colors from '../utils/style/colors';
-import { useEffect, useState } from 'react';
 import { Loader, LoaderWrapper } from '../utils/style/components';
+import { useFetch } from '../utils/hooks/fetch';
+import { Link } from 'react-router-dom';
+import { ThemeContext } from '../utils/context/theme';
+import { useContext } from 'react';
 
 const CardsContainer = styled.main`
   display: grid;
-  gap: 50px 0;
-  grid-template-columns: repeat(auto-fit, minmax(425px, 1fr));
+  gap: 50px;
+  margin: auto;
+  grid-template-columns: repeat(auto-fill, 350px);
+  max-width: 900px;
+  align-items: center;
   justify-content: center;
   justify-items: center;
 `;
 
 const FreelancesTitle = styled.h1`
   text-align: center;
-  color: #2f2e41;
+  color: ${({ theme }) => (theme === 'light' ? '#2f2e41' : '#FFF')};
   margin-bottom: 50px;
 `;
 
 const FreelancesSubTitle = styled.h2`
   font-size: 20px;
-  color: ${colors.secondary};
+  color: ${({ theme }) => (theme === 'light' ? colors.secondary : '#FFF')};
   font-weight: 300;
   text-align: center;
   padding-bottom: 30px;
 `;
 
 const Freelances = () => {
-  const [isDataLoading, setDataLoading] = useState(false);
-  const [freelancesData, setFreelancesData] = useState([]);
-  const [error, setError] = useState(false);
+  const { theme } = useContext(ThemeContext);
 
-  useEffect(() => {
-    async function fetchFreelance() {
-      setDataLoading(true);
-      try {
-        const response = await fetch(`http://localhost:8000/freelances`);
-        const { freelancersList } = await response.json();
-        setFreelancesData(freelancersList);
-      } catch (error) {
-        console.log(error);
-        setError(true);
-      } finally {
-        setDataLoading(false);
-      }
-    }
-    fetchFreelance();
-  }, []);
+  const { data, isLoading, error } = useFetch(
+    `http://localhost:8000/freelances`
+  );
+  const freelancersList = data?.freelancersList;
 
   if (error) {
     return <span>Oups il y a eu un problème</span>;
@@ -54,24 +46,28 @@ const Freelances = () => {
 
   return (
     <main>
-      <FreelancesTitle>Trouvez votre prestataire</FreelancesTitle>
-      <FreelancesSubTitle>
+      <FreelancesTitle theme={theme}>Trouvez votre prestataire</FreelancesTitle>
+      <FreelancesSubTitle theme={theme}>
         Chez Shiny nous réunissons les meilleurs profils pour vous.
       </FreelancesSubTitle>
 
-      {isDataLoading ? (
+      {isLoading ? (
         <LoaderWrapper>
           <Loader />
         </LoaderWrapper>
       ) : (
         <CardsContainer>
-          {freelancesData.map((profile, index) => (
-            <Card
+          {freelancersList?.map((profile, index) => (
+            <Link
+              to={`/profile/${profile.id}`}
               key={`${profile.name}-${index}`}
-              label={profile.job}
-              title={profile.name}
-              picture={profile.picture}
-            />
+            >
+              <Card
+                label={profile.job}
+                title={profile.name}
+                picture={profile.picture}
+              />
+            </Link>
           ))}
         </CardsContainer>
       )}

@@ -2,17 +2,19 @@ import PropTypes from 'prop-types';
 import DefaultPicture from '../assets/profile.png';
 import styled from 'styled-components';
 import colors from '../utils/style/colors';
+import { useContext } from 'react';
+import { ThemeContext } from '../utils/context/theme';
 
 const CardLabel = styled.span`
-  color: #5843e4;
+  color: ${({ theme }) => (theme === 'light' ? colors.primary : '#FFF')};
   font-size: 22px;
   font-weight: normal;
   padding-left: 15px;
 `;
 
 const CardTitle = styled.span`
-  color: black;
-  font-size: 22px;
+  color: ${({ theme }) => (theme === 'light' ? '#000' : '#FFF')};
+  font-size: 25px;
   font-weight: normal;
   align-self: center;
 `;
@@ -29,10 +31,11 @@ const CardWrapper = styled.div`
   flex-direction: column;
   justify-content: space-around;
   padding: 15px;
-  background-color: ${colors.backgroundLight};
+  background-color: ${({ theme }) =>
+    theme === 'light' ? colors.backgroundLight : colors.backgroundDark};
   border-radius: 30px;
-  width: 300px;
-  height: 300px;
+  width: 325px;
+  height: 325px;
   transition: 200ms;
   &:hover {
     cursor: pointer;
@@ -40,11 +43,12 @@ const CardWrapper = styled.div`
   }
 `;
 const Card = ({ label, title, picture }) => {
+  const { theme } = useContext(ThemeContext);
   return (
-    <CardWrapper>
-      <CardLabel>{label}</CardLabel>
+    <CardWrapper theme={theme}>
+      <CardLabel theme={theme}>{label}</CardLabel>
       <CardImage src={picture} alt="freelance" height={80} width={80} />
-      <CardTitle>{title}</CardTitle>
+      <CardTitle theme={theme}>{title}</CardTitle>
     </CardWrapper>
   );
 };

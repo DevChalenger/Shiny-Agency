@@ -6,12 +6,21 @@ const StyledGlobalStyle = createGlobalStyle`
   * {
     font-family: 'Trebuchet MS', Helvetica, sans-serif;
     box-sizing: border-box;
+  }   
+  body{
+    margin:0;
   }
-  body {
-    margin: 0; padding: 40px 64px 0 63px;
+  #root{     
     background-color: ${({ theme }) =>
       theme === 'dark' ? '#2F2E41' : 'white'};
-    min-height: 100vh;  
+      margin: 0; 
+      padding: 40px 64px 0 63px;
+      display:flex;
+      flex-direction:column;
+      min-height: 100vh;
+    }  
+  a{
+    text-decoration:none;
   }
 `;
 

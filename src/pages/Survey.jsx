@@ -6,6 +6,7 @@ import colors from '../utils/style/colors';
 import { Loader, LoaderWrapper } from '../utils/style/components';
 import { SurveyContext } from '../utils/context/survey';
 import { useFetch } from '../utils/hooks/fetch';
+import { ThemeContext } from '../utils/context/theme';
 
 const SurveyContainer = styled.div`
   display: flex;
@@ -14,18 +15,20 @@ const SurveyContainer = styled.div`
 `;
 
 const QuestionTitle = styled.h2`
+  color: ${({ theme }) => (theme === 'light' ? 'black' : 'white')};
   text-decoration: underline;
   text-decoration-color: ${colors.primary};
 `;
 
 const QuestionContent = styled.span`
+  color: ${({ theme }) => (theme === 'light' ? 'black' : 'white')};
   margin: 30px;
 `;
 
 const LinkWrapper = styled.div`
   padding-top: 30px;
   & a {
-    color: black;
+    color: ${({ theme }) => (theme === 'light' ? 'black' : 'white')};
   }
   & a:first-of-type {
     margin-right: 20px;
@@ -37,13 +40,20 @@ const ReplyBox = styled.button`
   height: 100px;
   width: 300px;
   display: flex;
+  font-size: 22px;
   align-items: center;
   justify-content: center;
-  background-color: ${colors.backgroundLight};
+  ${({ theme }) =>
+    theme === 'light'
+      ? `background-color: ${colors.backgroundLight};
+      color:black;`
+      : `background-color: ${colors.backgroundDark};
+      color:white;`}
+
   border-radius: 30px;
   cursor: pointer;
   box-shadow: ${(props) =>
-    props.isSelected ? `0px 0px 0px 2px ${colors.primary} inset` : 'none'};
+    props.isSelected ? `0px 0px 0px 3px ${colors.primary} inset` : 'none'};
   &:first-child {
     margin-right: 15px;
   }
@@ -65,6 +75,7 @@ function Survey() {
   const nextQuestionNumber = questionNumberInt + 1;
 
   const { saveAnswers, answers } = useContext(SurveyContext);
+  const { theme } = useContext(ThemeContext);
 
   function saveReply(answer) {
     saveAnswers({ [questionNumber]: answer });
@@ -80,31 +91,34 @@ function Survey() {
     return (
       <LoaderWrapper>
         <Loader />
+        <span>Questions Loading</span>
       </LoaderWrapper>
     );
   }
 
   return (
-    <SurveyContainer>
-      <QuestionTitle>Question {questionNumber}</QuestionTitle>
-      <QuestionContent>
+    <SurveyContainer theme={theme}>
+      <QuestionTitle theme={theme}>Question {questionNumber}</QuestionTitle>
+      <QuestionContent theme={theme}>
         {surveyData && surveyData[questionNumber]}
       </QuestionContent>
       <ReplyWrapper>
         <ReplyBox
+          theme={theme}
           onClick={() => saveReply(true)}
           isSelected={answers[questionNumber] === true}
         >
           Oui
         </ReplyBox>
         <ReplyBox
+          theme={theme}
           onClick={() => saveReply(false)}
           isSelected={answers[questionNumber] === false}
         >
           Non
         </ReplyBox>
       </ReplyWrapper>
-      <LinkWrapper>
+      <LinkWrapper theme={theme}>
         <Link to={`/survey/${prevQuestionNumber}`}>Précédent</Link>
         {surveyData && surveyData[questionNumberInt + 1] ? (
           <Link to={`/survey/${nextQuestionNumber}`}>Suivant</Link>

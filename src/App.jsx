@@ -19,6 +19,7 @@ import Freelances from './pages/Freelances';
 import { ThemeProvider } from './utils/context/theme';
 import GlobalStyle from './utils/style/GlobalStyle';
 import { SurveyProvider } from './utils/context/survey';
+import Profile from './pages/Profile';
 
 const App = () => {
   return (
@@ -32,6 +33,7 @@ const App = () => {
             <Route path="/survey/:questionNumber" element={<Survey />} />
             <Route path="/results" element={<Results />} />
             <Route path="/freelances" element={<Freelances />} />
+            <Route path="/profile/:id" element={<Profile />} />
             <Route path="*" element={<Error />} />
           </Navigation>
           <Footer />
